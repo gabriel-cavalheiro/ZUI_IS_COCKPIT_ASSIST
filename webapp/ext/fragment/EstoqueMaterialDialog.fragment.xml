@@ -1,0 +1,140 @@
+<!-- ============================================================ -->
+<!-- Alt 2: Custom Dialog - Estoque Material                      -->
+<!-- Popup aberto pelo botão "Estoque Material" no Object Page    -->
+<!-- Arquivo: webapp/ext/fragment/EstoqueMaterialDialog.fragment.xml -->
+<!-- ============================================================ -->
+<core:FragmentDefinition
+  xmlns:core="sap.ui.core"
+  xmlns="sap.m">
+ 
+  <Dialog
+    title="{i18n>estoqueTitle}"
+    contentWidth="900px"
+    contentHeight="600px"
+    draggable="true"
+    resizable="true">
+ 
+    <customHeader>
+      <Bar>
+        <contentLeft>
+          <Title text="{i18n>estoqueTitle}" level="H4" />
+        </contentLeft>
+        <contentRight>
+          <HBox alignItems="Center">
+            <Label text="{i18n>material}:" class="sapUiSmallMarginEnd" />
+            <Input
+              id="dlgInputMaterial"
+              placeholder="{i18n>materialPlaceholder}"
+              showValueHelp="true"
+              valueHelpRequest=".onMaterialValueHelpDialog"
+              width="250px"
+              submit=".onBuscarEstoqueDialog" />
+            <Button
+              text="{i18n>buscar}"
+              icon="sap-icon://search"
+              type="Emphasized"
+              press=".onBuscarEstoqueDialog"
+              class="sapUiSmallMarginBegin" />
+          </HBox>
+        </contentRight>
+      </Bar>
+    </customHeader>
+ 
+    <content>
+      <IconTabBar id="itbEstoque" select=".onEstoqueTabSelect">
+ 
+        <!-- Tab: Material Consultado -->
+        <items>
+          <IconTabFilter
+            text="{i18n>estoqueConsultado}"
+            icon="sap-icon://product"
+            key="consultado"
+            count="{dlgEstoque>/countConsultado}">
+ 
+            <Table
+              id="dlgTblConsultado"
+              items="{dlgEstoque>/consultado}"
+              noDataText="{i18n>semDados}">
+              <columns>
+                <Column><Text text="{i18n>material}" /></Column>
+                <Column><Text text="{i18n>centro}" /></Column>
+                <Column hAlign="End"><Text text="{i18n>estoqueDisponivel}" /></Column>
+                <Column hAlign="End"><Text text="{i18n>preco}" /></Column>
+              </columns>
+              <items>
+                <ColumnListItem
+                  highlight="{= ${dlgEstoque>EstoqueDisponivel} > 0 ? 'Success' : 'Error' }">
+                  <cells>
+                    <ObjectIdentifier
+                      title="{dlgEstoque>Material}"
+                      text="{dlgEstoque>MaterialDescription}" />
+                    <ObjectIdentifier
+                      title="{dlgEstoque>Plant}"
+                      text="{dlgEstoque>PlantName}" />
+                    <ObjectNumber
+                      number="{dlgEstoque>EstoqueDisponivel}"
+                      unit="{dlgEstoque>BaseUnit}"
+                      state="{= ${dlgEstoque>EstoqueDisponivel} > 0 ? 'Success' : 'Error' }" />
+                    <ObjectNumber
+                      number="{dlgEstoque>PrecoCondicao}"
+                      unit="{dlgEstoque>ConditionCurrency}"
+                      state="Information" />
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+ 
+          </IconTabFilter>
+ 
+          <!-- Tab: Materiais Relacionados -->
+          <IconTabFilter
+            text="{i18n>estoqueRelacionados}"
+            icon="sap-icon://connected"
+            key="relacionado"
+            count="{dlgEstoque>/countRelacionado}">
+ 
+            <Table
+              id="dlgTblRelacionado"
+              items="{dlgEstoque>/relacionado}"
+              noDataText="{i18n>semDadosRelacionados}">
+              <columns>
+                <Column><Text text="{i18n>material}" /></Column>
+                <Column><Text text="{i18n>centro}" /></Column>
+                <Column hAlign="End"><Text text="{i18n>estoqueDisponivel}" /></Column>
+                <Column hAlign="End"><Text text="{i18n>preco}" /></Column>
+              </columns>
+              <items>
+                <ColumnListItem
+                  highlight="{= ${dlgEstoque>EstoqueDisponivel} > 0 ? 'Success' : 'Error' }">
+                  <cells>
+                    <ObjectIdentifier
+                      title="{dlgEstoque>Material}"
+                      text="{dlgEstoque>MaterialDescription}" />
+                    <ObjectIdentifier
+                      title="{dlgEstoque>Plant}"
+                      text="{dlgEstoque>PlantName}" />
+                    <ObjectNumber
+                      number="{dlgEstoque>EstoqueDisponivel}"
+                      unit="{dlgEstoque>BaseUnit}"
+                      state="{= ${dlgEstoque>EstoqueDisponivel} > 0 ? 'Success' : 'Error' }" />
+                    <ObjectNumber
+                      number="{dlgEstoque>PrecoCondicao}"
+                      unit="{dlgEstoque>ConditionCurrency}"
+                      state="Information" />
+                  </cells>
+                </ColumnListItem>
+              </items>
+            </Table>
+ 
+          </IconTabFilter>
+        </items>
+      </IconTabBar>
+    </content>
+ 
+    <beginButton>
+      <Button text="{i18n>fechar}" press=".onFecharEstoqueDialog" />
+    </beginButton>
+ 
+  </Dialog>
+ 
+</core:FragmentDefinition>

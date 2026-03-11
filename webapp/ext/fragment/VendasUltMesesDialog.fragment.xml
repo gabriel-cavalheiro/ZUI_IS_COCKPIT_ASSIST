@@ -1,0 +1,96 @@
+<!-- ============================================================ -->
+<!-- Alt 2: Custom Dialog - Vendas Últimos 12 Meses               -->
+<!-- Popup aberto pelo botão "Vendas Últimos Meses"               -->
+<!-- Arquivo: webapp/ext/fragment/VendasUltMesesDialog.fragment.xml -->
+<!-- ============================================================ -->
+<core:FragmentDefinition
+  xmlns:core="sap.ui.core"
+  xmlns="sap.m">
+ 
+  <Dialog
+    title="{i18n>vendasTitle}"
+    contentWidth="1000px"
+    contentHeight="550px"
+    draggable="true"
+    resizable="true">
+ 
+    <customHeader>
+      <Bar>
+        <contentLeft>
+          <Title text="{i18n>vendasTitle}" level="H4" />
+        </contentLeft>
+        <contentMiddle>
+          <Text text="Cliente: {dlgVendas>/customerName}" />
+        </contentMiddle>
+      </Bar>
+    </customHeader>
+ 
+    <content>
+      <Table
+        id="dlgTblVendas"
+        items="{dlgVendas>/items}"
+        noDataText="{i18n>semVendas}"
+        growing="true"
+        growingThreshold="50"
+        fixedLayout="false">
+ 
+        <headerToolbar>
+          <OverflowToolbar>
+            <SearchField
+              placeholder="{i18n>filtrarMaterial}"
+              liveChange=".onFilterVendasDialog"
+              width="250px" />
+            <ToolbarSpacer />
+            <Label text="{i18n>totalDocumentos}:" />
+            <ObjectNumber number="{dlgVendas>/totalDocs}" emphasized="true" />
+          </OverflowToolbar>
+        </headerToolbar>
+ 
+        <columns>
+          <Column width="12%">
+            <Text text="{i18n>material}" />
+          </Column>
+          <Column width="22%">
+            <Text text="{i18n>descricao}" />
+          </Column>
+          <Column width="12%" hAlign="Center">
+            <Text text="{i18n>anoMes}" />
+          </Column>
+          <Column width="15%" hAlign="End">
+            <Text text="{i18n>qtdFaturada}" />
+          </Column>
+          <Column width="18%" hAlign="End">
+            <Text text="{i18n>valorLiquido}" />
+          </Column>
+          <Column width="12%" hAlign="End">
+            <Text text="{i18n>qtdDocumentos}" />
+          </Column>
+        </columns>
+ 
+        <items>
+          <ColumnListItem>
+            <cells>
+              <Text text="{dlgVendas>Material}" />
+              <Text text="{dlgVendas>MaterialDescription}" />
+              <Text text="{dlgVendas>AnoMes}" />
+              <ObjectNumber
+                number="{dlgVendas>QtdFaturada}"
+                unit="{dlgVendas>BillingQuantityUnit}" />
+              <ObjectNumber
+                number="{dlgVendas>ValorLiquido}"
+                unit="{dlgVendas>TransactionCurrency}"
+                state="Information" />
+              <ObjectNumber number="{dlgVendas>QtdDocumentos}" />
+            </cells>
+          </ColumnListItem>
+        </items>
+      </Table>
+    </content>
+ 
+    <beginButton>
+      <Button text="{i18n>fechar}" press=".onFecharVendasDialog" />
+    </beginButton>
+ 
+  </Dialog>
+ 
+</core:FragmentDefinition>
