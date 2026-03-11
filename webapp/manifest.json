@@ -142,20 +142,20 @@
                 "header": {
                   "actions": {
                     "EstoqueMaterials": {
-                      "press": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.Cockpitpopuphandler",
+                      "press": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirEstoqueMaterial",
                       "visible": true,
                       "enabled": true,
-                      "text": "Estoque de Materiais",
+                      "text": "{i18n>btnEstoque}",
                       "position": {
                         "placement": "After",
                         "anchor": "DeleteAction"
                       }
                     },
                     "VendaUltMeses": {
-                      "press": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.Cockpitpopuphandler",
+                      "press": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirVendasUltMeses",
                       "visible": true,
                       "enabled": true,
-                      "text": "Vendas Últimos Meses",
+                      "text": "{i18n>btnVendas}",
                       "position": {
                         "placement": "Before",
                         "anchor": "EstoqueMaterials"
