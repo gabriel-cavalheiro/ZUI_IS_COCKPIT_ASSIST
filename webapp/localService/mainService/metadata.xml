@@ -89,7 +89,7 @@
                 <Property Name="StatusCriticality" Type="Edm.Byte" Nullable="false"/>
                 <Property Name="StatusDescricao" Type="Edm.String" Nullable="false" MaxLength="7"/>
             </EntityType>
-            <EntityType Name="EstoqueMateriasType">
+            <EntityType Name="EstoqueMaterialType">
                 <Key>
                     <PropertyRef Name="Material"/>
                     <PropertyRef Name="Plant"/>
@@ -237,7 +237,7 @@
                     <NavigationPropertyBinding Path="DraftAdministrativeData" Target="I_DraftAdministrativeData"/>
                     <NavigationPropertyBinding Path="SiblingEntity" Target="Cockpit"/>
                 </EntitySet>
-                <EntitySet Name="EstoqueMaterias" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.EstoqueMateriasType"/>
+                <EntitySet Name="EstoqueMaterial" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.EstoqueMaterialType"/>
                 <EntitySet Name="ItemsPO" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.ItemsPOType"/>
                 <EntitySet Name="I_DraftAdministrativeData" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.I_DraftAdministrativeDataType"/>
                 <EntitySet Name="TitulosVencidos" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.TitulosVencidosType"/>
@@ -470,7 +470,7 @@
                     </Record>
                 </Annotation>
             </Annotations>
-            <Annotations Target="SAP__self.EstoqueMateriasType/Material">
+            <Annotations Target="SAP__self.EstoqueMaterialType/Material">
                 <Annotation Term="SAP__common.IsUpperCase"/>
                 <Annotation Term="SAP__common.ValueListReferences">
                     <Collection>
@@ -481,32 +481,32 @@
                 <Annotation Term="SAP__common.QuickInfo" String="Nº do material"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MATNR"/>
             </Annotations>
-            <Annotations Target="SAP__self.EstoqueMateriasType/Plant">
+            <Annotations Target="SAP__self.EstoqueMaterialType/Plant">
                 <Annotation Term="SAP__common.IsUpperCase"/>
                 <Annotation Term="SAP__common.Label" String="Centro"/>
                 <Annotation Term="SAP__common.Heading" String="Cen."/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WERKS_D"/>
             </Annotations>
-            <Annotations Target="SAP__self.EstoqueMateriasType/EstoqueDisponivel">
+            <Annotations Target="SAP__self.EstoqueMaterialType/EstoqueDisponivel">
                 <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
             </Annotations>
-            <Annotations Target="SAP__self.EstoqueMateriasType/BaseUnit">
+            <Annotations Target="SAP__self.EstoqueMaterialType/BaseUnit">
                 <Annotation Term="SAP__common.IsUnit"/>
                 <Annotation Term="SAP__common.Label" String="UMB"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Unidade de medida básica"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=MEINS"/>
             </Annotations>
-            <Annotations Target="SAP__self.EstoqueMateriasType/PrecoCondicao">
+            <Annotations Target="SAP__self.EstoqueMaterialType/PrecoCondicao">
                 <Annotation Term="SAP__measures.ISOCurrency" Path="ConditionCurrency"/>
             </Annotations>
-            <Annotations Target="SAP__self.EstoqueMateriasType/ConditionCurrency">
+            <Annotations Target="SAP__self.EstoqueMaterialType/ConditionCurrency">
                 <Annotation Term="SAP__common.IsCurrency"/>
                 <Annotation Term="SAP__common.IsUpperCase"/>
                 <Annotation Term="SAP__common.Label" String="Moeda"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Código da moeda"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=WAERS"/>
             </Annotations>
-            <Annotations Target="SAP__self.EstoqueMateriasType">
+            <Annotations Target="SAP__self.EstoqueMaterialType">
                 <Annotation Term="SAP__common.Label" String="Basic Custom - Estoque de Materiais por Preço"/>
                 <Annotation Term="SAP__UI.Identification">
                     <Collection>
@@ -584,7 +584,7 @@
                     </Collection>
                 </Annotation>
             </Annotations>
-            <Annotations Target="SAP__self.Container/EstoqueMaterias">
+            <Annotations Target="SAP__self.Container/EstoqueMaterial">
                 <Annotation Term="SAP__capabilities.SearchRestrictions">
                     <Record>
                         <PropertyValue Property="Searchable" Bool="false"/>
