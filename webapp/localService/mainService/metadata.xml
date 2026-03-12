@@ -155,6 +155,7 @@
                 <Property Name="Customer" Type="Edm.String" Nullable="false" MaxLength="10"/>
                 <Property Name="CustomerName" Type="Edm.String" Nullable="false" MaxLength="60"/>
                 <Property Name="LabelTitle" Type="Edm.String" Nullable="false" MaxLength="29"/>
+                <Property Name="LabelSituacao" Type="Edm.String" Nullable="false" MaxLength="10"/>
                 <Property Name="Situacao" Type="Edm.String" Nullable="false" MaxLength="2"/>
                 <Property Name="SituacaoCriticality" Type="Edm.Byte" Nullable="false"/>
                 <Property Name="DataAtendimento" Type="Edm.Date"/>
@@ -182,6 +183,7 @@
                 <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zui_is_atend_cock.v0001.SAP__Message)" Nullable="false"/>
                 <NavigationProperty Name="DraftAdministrativeData" Type="com.sap.gateway.srvd.zui_is_atend_cock.v0001.I_DraftAdministrativeDataType"/>
                 <NavigationProperty Name="SiblingEntity" Type="com.sap.gateway.srvd.zui_is_atend_cock.v0001.CockpitType"/>
+                <NavigationProperty Name="_ItemsPO" Type="Collection(com.sap.gateway.srvd.zui_is_atend_cock.v0001.ItemsPOType)"/>
             </EntityType>
             <ComplexType Name="CockpitOperationControl">
                 <Property Name="cancelar" Type="Edm.Boolean" Nullable="false"/>
@@ -236,6 +238,7 @@
                 <EntitySet Name="Cockpit" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.CockpitType">
                     <NavigationPropertyBinding Path="DraftAdministrativeData" Target="I_DraftAdministrativeData"/>
                     <NavigationPropertyBinding Path="SiblingEntity" Target="Cockpit"/>
+                    <NavigationPropertyBinding Path="_ItemsPO" Target="ItemsPO"/>
                 </EntitySet>
                 <EntitySet Name="EstoqueMaterial" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.EstoqueMaterialType"/>
                 <EntitySet Name="ItemsPO" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.ItemsPOType"/>
@@ -697,6 +700,50 @@
             </Annotations>
             <Annotations Target="SAP__self.ItemsPOType">
                 <Annotation Term="SAP__common.Label" String="Basic - Itens do Pedido de Venda"/>
+                <Annotation Term="SAP__UI.LineItem">
+                    <Collection>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Item Pedido"/>
+                            <PropertyValue Property="Value" Path="ItemPedido"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Material"/>
+                            <PropertyValue Property="Value" Path="Material"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Descrição"/>
+                            <PropertyValue Property="Value" Path="DescricaoMaterial"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Centro"/>
+                            <PropertyValue Property="Value" Path="Centro"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Quantidade"/>
+                            <PropertyValue Property="Value" Path="Quantidade"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Unidade Medida"/>
+                            <PropertyValue Property="Value" Path="UnidadeMedida"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Valor Liquido"/>
+                            <PropertyValue Property="Value" Path="ValorLiquido"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Moeda"/>
+                            <PropertyValue Property="Value" Path="Moeda"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Status Entrega"/>
+                            <PropertyValue Property="Value" Path="StatusEntrega"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Status Processo"/>
+                            <PropertyValue Property="Value" Path="StatusProcesso"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
             </Annotations>
             <Annotations Target="SAP__self.Container/ItemsPO">
                 <Annotation Term="SAP__capabilities.SearchRestrictions">
@@ -863,6 +910,11 @@
             <Annotations Target="SAP__self.CockpitType/LabelTitle">
                 <Annotation Term="SAP__common.Text" Path="LabelTitle"/>
             </Annotations>
+            <Annotations Target="SAP__self.CockpitType/Situacao">
+                <Annotation Term="SAP__common.Text" Path="LabelSituacao">
+                    <Annotation Term="SAP__UI.TextArrangement" EnumMember="SAP__UI.TextArrangementType/TextOnly"/>
+                </Annotation>
+            </Annotations>
             <Annotations Target="SAP__self.CockpitType/Pedido">
                 <Annotation Term="SAP__common.IsUpperCase"/>
                 <Annotation Term="SAP__common.Label" String="Documento SD"/>
@@ -892,20 +944,18 @@
                         <PropertyValue Property="Name" String="ZTBIS_ATEND_COCK"/>
                     </Record>
                 </Annotation>
+                <Annotation Term="SAP__UI.DataPoint" Qualifier="DPNomeCliente">
+                    <Record>
+                        <PropertyValue Property="Value" Path="CustomerName"/>
+                        <PropertyValue Property="Title" String="Cliente"/>
+                    </Record>
+                </Annotation>
                 <Annotation Term="SAP__UI.DataPoint" Qualifier="DPSituacao">
                     <Record>
                         <PropertyValue Property="Value" Path="Situacao"/>
                         <PropertyValue Property="Title" String="Situação"/>
                         <PropertyValue Property="Criticality" Path="SituacaoCriticality"/>
                     </Record>
-                </Annotation>
-                <Annotation Term="SAP__UI.HeaderFacets">
-                    <Collection>
-                        <Record Type="SAP__UI.ReferenceFacet">
-                            <PropertyValue Property="ID" String="HeaderSituacao"/>
-                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.DataPoint#DPSituacao"/>
-                        </Record>
-                    </Collection>
                 </Annotation>
                 <Annotation Term="SAP__UI.Facets">
                     <Collection>
@@ -915,19 +965,31 @@
                             <PropertyValue Property="Target" AnnotationPath="@SAP__UI.Identification"/>
                         </Record>
                         <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="itens do Pedido"/>
+                            <PropertyValue Property="ID" String="itensPedido"/>
+                            <PropertyValue Property="Target" AnnotationPath="_ItemsPO/@SAP__UI.LineItem"/>
+                        </Record>
+                        <Record Type="SAP__UI.ReferenceFacet">
                             <PropertyValue Property="Label" String="Ocorrência"/>
                             <PropertyValue Property="ID" String="Ocorrencia"/>
                             <PropertyValue Property="Target" AnnotationPath="@SAP__UI.FieldGroup#Ocorrencia"/>
                         </Record>
                         <Record Type="SAP__UI.ReferenceFacet">
-                            <PropertyValue Property="Label" String="Documentos"/>
-                            <PropertyValue Property="ID" String="Documentos"/>
-                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.FieldGroup#Documentos"/>
-                        </Record>
-                        <Record Type="SAP__UI.ReferenceFacet">
                             <PropertyValue Property="Label" String="Dados Administrativos"/>
                             <PropertyValue Property="ID" String="AdminData"/>
                             <PropertyValue Property="Target" AnnotationPath="@SAP__UI.FieldGroup#Admin"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__UI.HeaderFacets">
+                    <Collection>
+                        <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="HeaderNomeCliente"/>
+                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.DataPoint#DPNomeCliente"/>
+                        </Record>
+                        <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="HeaderSituacao"/>
+                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.DataPoint#DPSituacao"/>
                         </Record>
                     </Collection>
                 </Annotation>
@@ -992,25 +1054,13 @@
                     </Record>
                 </Annotation>
                 <Annotation Term="SAP__UI.HeaderInfo">
-                    <Annotation Term="SAP__core.Messages">
-                        <Collection>
-                            <Record>
-                                <PropertyValue Property="message" String="UI.HEADERINFO: TypeNamePlural is mandatory"/>
-                                <PropertyValue Property="severity" String="error"/>
-                            </Record>
-                        </Collection>
-                    </Annotation>
                     <Record>
                         <PropertyValue Property="TypeName" String="Atendimento"/>
+                        <PropertyValue Property="TypeNamePlural" String="Lista de Atendimentos"/>
                         <PropertyValue Property="TypeImageUrl" String="sap-icon://activity-items"/>
                         <PropertyValue Property="Title">
                             <Record Type="SAP__UI.DataField">
                                 <PropertyValue Property="Value" Path="LabelTitle"/>
-                            </Record>
-                        </PropertyValue>
-                        <PropertyValue Property="Description">
-                            <Record Type="SAP__UI.DataField">
-                                <PropertyValue Property="Value" Path="CustomerName"/>
                             </Record>
                         </PropertyValue>
                     </Record>
@@ -1081,6 +1131,7 @@
                         <Record Type="SAP__UI.DataField">
                             <PropertyValue Property="Label" String="Situação"/>
                             <PropertyValue Property="Criticality" Path="SituacaoCriticality"/>
+                            <PropertyValue Property="CriticalityRepresentation" EnumMember="SAP__UI.CriticalityRepresentationType/WithoutIcon"/>
                             <PropertyValue Property="Value" Path="Situacao"/>
                             <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/High"/>
                         </Record>
@@ -1218,6 +1269,14 @@
                                         </Record>
                                     </PropertyValue>
                                 </Record>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="_ItemsPO"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
                             </Collection>
                         </PropertyValue>
                     </Record>
@@ -1282,6 +1341,7 @@
                             <Collection>
                                 <PropertyPath>DraftAdministrativeData</PropertyPath>
                                 <PropertyPath>SiblingEntity</PropertyPath>
+                                <PropertyPath>_ItemsPO</PropertyPath>
                             </Collection>
                         </PropertyValue>
                         <PropertyValue Property="QueryOptions">
