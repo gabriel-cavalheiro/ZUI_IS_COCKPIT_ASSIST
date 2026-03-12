@@ -68,6 +68,15 @@
   },
   "sap.ui5": {
     "flexEnabled": true,
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ObjectPage.ObjectPageController#br.com.gamma.zuiiscockpitassist::CockpitObjectPage": {
+            "controllerName": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup"
+          }
+        }
+      }
+    },
     "dependencies": {
       "minUI5Version": "1.142.7",
       "libs": {
@@ -152,14 +161,11 @@
             "settings": {
               "editableHeaderContent": false,
               "contextPath": "/Cockpit",
-              "controllerExtensions": {
-                "sap.fe.templates.ObjectPage.ObjectPageController": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup"
-              },
               "content": {
                 "header": {
                   "actions": {
                     "EstoqueMaterials": {
-                      "press": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirEstoqueMaterial",
+                      "press": ".extension.br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirEstoqueMaterial",
                       "visible": true,
                       "enabled": true,
                       "text": "{i18n>btnEstoque}",
@@ -169,7 +175,7 @@
                       }
                     },
                     "VendaUltMeses": {
-                      "press": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirVendasUltMeses",
+                      "press": ".extension.br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirVendasUltMeses",
                       "visible": true,
                       "enabled": true,
                       "text": "{i18n>btnVendas}",
