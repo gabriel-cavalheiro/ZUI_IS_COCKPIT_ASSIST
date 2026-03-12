@@ -1,0 +1,71 @@
+<core:FragmentDefinition
+  xmlns:core="sap.ui.core"
+  xmlns="sap.m">
+
+  <Table
+    id="tblItensPedido"
+    items="{itensPedido>/items}"
+    noDataText="{i18n>semItensPedido}"
+    growing="true"
+    growingThreshold="20"
+    fixedLayout="false"
+    busyIndicatorDelay="0"
+    busy="{itensPedido>/loading}">
+
+    <headerToolbar>
+      <OverflowToolbar>
+        <ToolbarSpacer />
+        <Title text="{i18n>pedido}: {itensPedido>/pedido}" level="H5" />
+      </OverflowToolbar>
+    </headerToolbar>
+
+    <columns>
+      <Column width="8%">
+        <Text text="{i18n>itemPedido}" />
+      </Column>
+      <Column width="13%">
+        <Text text="{i18n>material}" />
+      </Column>
+      <Column width="22%">
+        <Text text="{i18n>descricao}" />
+      </Column>
+      <Column width="8%" hAlign="Center">
+        <Text text="{i18n>centro}" />
+      </Column>
+      <Column width="13%" hAlign="End">
+        <Text text="{i18n>qtdItem}" />
+      </Column>
+      <Column width="14%" hAlign="End">
+        <Text text="{i18n>valorLiquido}" />
+      </Column>
+      <Column width="10%" hAlign="Center">
+        <Text text="{i18n>statusEntrega}" />
+      </Column>
+      <Column>
+        <Text text="{i18n>textItem}" />
+      </Column>
+    </columns>
+
+    <items>
+      <ColumnListItem>
+        <cells>
+          <Text text="{itensPedido>ItemPedido}" />
+          <Text text="{itensPedido>Material}" />
+          <Text text="{itensPedido>DescricaoMaterial}" />
+          <Text text="{itensPedido>Centro}" />
+          <ObjectNumber
+            number="{itensPedido>Quantidade}"
+            unit="{itensPedido>UnidadeMedida}" />
+          <ObjectNumber
+            number="{itensPedido>ValorLiquido}"
+            unit="{itensPedido>Moeda}"
+            state="Information" />
+          <Text text="{itensPedido>StatusEntrega}" />
+          <Text text="{itensPedido>TextoItem}" />
+        </cells>
+      </ColumnListItem>
+    </items>
+
+  </Table>
+
+</core:FragmentDefinition>

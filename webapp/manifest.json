@@ -177,6 +177,27 @@
                         "placement": "Before",
                         "anchor": "EstoqueMaterials"
                       }
+                    },
+                    "TitulosVencidos": {
+                      "press": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirTitulosVencidos",
+                      "visible": true,
+                      "enabled": true,
+                      "text": "{i18n>btnTitulosVencidos}",
+                      "position": {
+                        "placement": "Before",
+                        "anchor": "VendaUltMeses"
+                      }
+                    }
+                  }
+                },
+                "body": {
+                  "sections": {
+                    "ItensPedidoSection": {
+                      "template": "br.com.gamma.zuiiscockpitassist.ext.fragment.ItensPedidoSection",
+                      "title": "{i18n>itensPedidoTitle}",
+                      "position": {
+                        "placement": "End"
+                      }
                     }
                   }
                 }

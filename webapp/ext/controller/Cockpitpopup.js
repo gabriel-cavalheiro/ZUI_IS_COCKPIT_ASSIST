@@ -25,13 +25,15 @@ sap.ui.define([
 
         metadata: {
             methods: {
-                onAbrirEstoqueMaterial:     { public: true, final: false },
-                onAbrirVendasUltMeses:      { public: true, final: false },
-                onBuscarEstoqueDialog:      { public: true, final: false },
-                onMaterialValueHelpDialog:  { public: true, final: false },
-                onFecharEstoqueDialog:      { public: true, final: false },
-                onFilterVendasDialog:       { public: true, final: false },
-                onFecharVendasDialog:       { public: true, final: false }
+                onAbrirEstoqueMaterial:         { public: true, final: false },
+                onAbrirVendasUltMeses:          { public: true, final: false },
+                onBuscarEstoqueDialog:          { public: true, final: false },
+                onMaterialValueHelpDialog:      { public: true, final: false },
+                onFecharEstoqueDialog:          { public: true, final: false },
+                onFilterVendasDialog:           { public: true, final: false },
+                onFecharVendasDialog:           { public: true, final: false },
+                onAbrirTitulosVencidos:         { public: true, final: false },
+                onFecharTitulosVencidosDialog:  { public: true, final: false }
             }
         },
 
@@ -390,6 +392,170 @@ sap.ui.define([
         onFecharVendasDialog: function () {
             if (this._oVendasDialog) {
                 this._oVendasDialog.close();
+            }
+        },
+
+        // ================================================================
+        //  SEÇÃO: ITENS DO PEDIDO
+        // ================================================================
+        //
+        //  Carregado automaticamente via override.routing.onAfterBinding
+        //  quando a ObjectPage faz o bind do registro Cockpit.
+        //  Filtra ItemsPO pelo campo Pedido do registro atual.
+        //
+        // ================================================================
+
+        /**
+         * Lifecycle override: carrega dados da seção assim que o binding está pronto
+         */
+        override: {
+            routing: {
+                onAfterBinding: function (oBindingContext) {
+                    if (!oBindingContext) { return; }
+
+                    var sPedido = oBindingContext.getProperty("Pedido");
+
+                    // Inicializa modelo da seção na primeira vez
+                    if (!this._oItensPedidoModel) {
+                        this._oItensPedidoModel = new JSONModel({
+                            items: [],
+                            pedido: "",
+                            loading: false
+                        });
+                        this.base.getView().setModel(this._oItensPedidoModel, "itensPedido");
+                    }
+
+                    if (sPedido) {
+                        this._fetchItensPedidoSection(sPedido);
+                    } else {
+                        this._oItensPedidoModel.setData({ items: [], pedido: "", loading: false });
+                    }
+                }
+            }
+        },
+
+        /**
+         * Busca itens do pedido via OData V4
+         * @param {string} sPedido - Número do pedido
+         */
+        _fetchItensPedidoSection: function (sPedido) {
+            var that = this;
+            var oModel = this.base.getView().getModel();
+
+            this._oItensPedidoModel.setProperty("/loading", true);
+            this._oItensPedidoModel.setProperty("/pedido", sPedido);
+
+            var oListBinding = oModel.bindList(
+                "/ItemsPO",
+                undefined,
+                undefined,
+                [new Filter("Pedido", FilterOperator.EQ, sPedido)]
+            );
+
+            oListBinding.requestContexts(0, 999).then(function (aContexts) {
+                var aItems = aContexts.map(function (oCtx) { return oCtx.getObject(); });
+                that._oItensPedidoModel.setData({
+                    items: aItems,
+                    pedido: sPedido,
+                    loading: false
+                });
+            }).catch(function (oError) {
+                that._oItensPedidoModel.setProperty("/loading", false);
+                MessageBox.error("Erro ao buscar itens do pedido: " + (oError.message || oError));
+            });
+        },
+
+        // ================================================================
+        //  POPUP 3: TÍTULOS VENCIDOS
+        // ================================================================
+
+        /**
+         * Custom Action: Abre o dialog de Títulos Vencidos
+         */
+        onAbrirTitulosVencidos: function () {
+            if (!this._captureClienteContext()) { return; }
+
+            if (!this._oTitulosModel) {
+                this._oTitulosModel = new JSONModel({
+                    items: [],
+                    customerName: "",
+                    totalMontante: "0.00",
+                    moeda: "",
+                    loading: false
+                });
+            }
+
+            var that = this;
+            var oView = this.base.getView();
+
+            if (!this._oTitulosDialog) {
+                Fragment.load({
+                    id: oView.getId(),
+                    name: "br.com.gamma.zuiiscockpitassist.ext.fragment.TitulosVencidosDialog",
+                    controller: this
+                }).then(function (oDialog) {
+                    that._oTitulosDialog = oDialog;
+                    oView.addDependent(oDialog);
+                    oDialog.setModel(that._oTitulosModel, "dlgTitulos");
+                    that._fetchTitulosVencidosData();
+                    oDialog.open();
+                });
+            } else {
+                this._fetchTitulosVencidosData();
+                this._oTitulosDialog.open();
+            }
+        },
+
+        /**
+         * Busca títulos vencidos via OData V4
+         */
+        _fetchTitulosVencidosData: function () {
+            var that = this;
+            var oModel = this.base.getView().getModel();
+
+            this._oTitulosModel.setProperty("/loading", true);
+            this._oTitulosModel.setProperty("/customerName", this._sCustomerName || this._sCustomer);
+
+            var aFilters = [new Filter("Customer", FilterOperator.EQ, this._sCustomer)];
+            if (this._sCompanyCode) {
+                aFilters.push(new Filter("CompanyCode", FilterOperator.EQ, this._sCompanyCode));
+            }
+
+            var oListBinding = oModel.bindList("/TitulosVencidos", undefined, undefined, aFilters);
+
+            oListBinding.requestContexts(0, 999).then(function (aContexts) {
+                var aItems = aContexts.map(function (oCtx) { return oCtx.getObject(); });
+
+                var fTotal = 0;
+                var sMoeda = "";
+                aItems.forEach(function (item) {
+                    fTotal += parseFloat(item.Montante || 0);
+                    if (!sMoeda && item.Moeda) { sMoeda = item.Moeda; }
+                });
+
+                that._oTitulosModel.setData({
+                    items: aItems,
+                    customerName: that._sCustomerName || that._sCustomer,
+                    totalMontante: fTotal.toFixed(2),
+                    moeda: sMoeda,
+                    loading: false
+                });
+
+                if (aItems.length === 0) {
+                    MessageToast.show("Nenhum título vencido para o cliente " + that._sCustomer);
+                }
+            }).catch(function (oError) {
+                that._oTitulosModel.setProperty("/loading", false);
+                MessageBox.error("Erro ao buscar títulos vencidos: " + (oError.message || oError));
+            });
+        },
+
+        /**
+         * Handler: Fechar dialog de títulos vencidos
+         */
+        onFecharTitulosVencidosDialog: function () {
+            if (this._oTitulosDialog) {
+                this._oTitulosDialog.close();
             }
         }
 
