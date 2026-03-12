@@ -177,16 +177,6 @@
                         "placement": "Before",
                         "anchor": "EstoqueMaterials"
                       }
-                    },
-                    "TitulosVencidos": {
-                      "press": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirTitulosVencidos",
-                      "visible": true,
-                      "enabled": true,
-                      "text": "{i18n>btnTitulosVencidos}",
-                      "position": {
-                        "placement": "Before",
-                        "anchor": "VendaUltMeses"
-                      }
                     }
                   }
                 },
