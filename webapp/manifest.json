@@ -138,6 +138,9 @@
             "settings": {
               "editableHeaderContent": false,
               "contextPath": "/Cockpit",
+              "controllerExtensions": {
+                "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup": {}
+              },
               "content": {
                 "header": {
                   "actions": {

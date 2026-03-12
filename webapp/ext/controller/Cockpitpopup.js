@@ -21,7 +21,7 @@ sap.ui.define([
 ], function (ControllerExtension, Fragment, JSONModel, Filter, FilterOperator, MessageToast, MessageBox) {
     "use strict";
 
-    return ControllerExtension.extend("zvsdcockpit.ext.controller.CockpitPopupExtension", {
+    return ControllerExtension.extend("br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup", {
 
         // ================================================================
         // Helpers: captura dados do cliente a partir do binding context
@@ -233,7 +233,7 @@ sap.ui.define([
                 });
                 oView.addDependent(this._oMatVHDialog);
             }
-            this._oMatVHDialog.open();
+            this._oMatVHDialog.open("");
         },
 
         /**
