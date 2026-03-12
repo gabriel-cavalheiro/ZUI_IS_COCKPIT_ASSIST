@@ -23,6 +23,18 @@ sap.ui.define([
 
     return ControllerExtension.extend("br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup", {
 
+        metadata: {
+            methods: {
+                onAbrirEstoqueMaterial:     { public: true, final: false },
+                onAbrirVendasUltMeses:      { public: true, final: false },
+                onBuscarEstoqueDialog:      { public: true, final: false },
+                onMaterialValueHelpDialog:  { public: true, final: false },
+                onFecharEstoqueDialog:      { public: true, final: false },
+                onFilterVendasDialog:       { public: true, final: false },
+                onFecharVendasDialog:       { public: true, final: false }
+            }
+        },
+
         // ================================================================
         // Helpers: captura dados do cliente a partir do binding context
         // ================================================================
