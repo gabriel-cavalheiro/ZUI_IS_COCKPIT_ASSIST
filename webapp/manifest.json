@@ -68,15 +68,6 @@
   },
   "sap.ui5": {
     "flexEnabled": true,
-    "extends": {
-      "extensions": {
-        "sap.ui.controllerExtensions": {
-          "sap.fe.templates.ObjectPage.ObjectPageController#br.com.gamma.zuiiscockpitassist::CockpitObjectPage": {
-            "controllerName": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup"
-          }
-        }
-      }
-    },
     "dependencies": {
       "minUI5Version": "1.142.7",
       "libs": {
@@ -161,6 +152,11 @@
             "settings": {
               "editableHeaderContent": false,
               "contextPath": "/Cockpit",
+              "controllerExtensions": {
+                "sap.fe.templates.ObjectPage.ObjectPageController": {
+                  "controllerName": "br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup"
+                }
+              },
               "content": {
                 "header": {
                   "actions": {
