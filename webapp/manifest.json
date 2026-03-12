@@ -190,17 +190,7 @@
                     }
                   }
                 },
-                "body": {
-                  "sections": {
-                    "ItensPedidoSection": {
-                      "template": "br.com.gamma.zuiiscockpitassist.ext.fragment.ItensPedidoSection",
-                      "title": "{i18n>itensPedidoTitle}",
-                      "position": {
-                        "placement": "End"
-                      }
-                    }
-                  }
-                }
+                "body": {}
               }
             }
           }
