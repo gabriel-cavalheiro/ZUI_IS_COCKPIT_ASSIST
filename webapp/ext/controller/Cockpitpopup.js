@@ -84,7 +84,7 @@ sap.ui.define([
                 // Carrega o fragment na primeira vez
                 Fragment.load({
                     id: oView.getId(),
-                    name: "zvsdcockpit.ext.fragment.EstoqueMaterialDialog",
+                    name: "br.com.gamma.zuiiscockpitassist.ext.fragment.EstoqueMaterialDialog",
                     controller: this
                 }).then(function (oDialog) {
                     that._oEstoqueDialog = oDialog;
@@ -286,7 +286,7 @@ sap.ui.define([
             if (!this._oVendasDialog) {
                 Fragment.load({
                     id: oView.getId(),
-                    name: "zvsdcockpit.ext.fragment.VendasUltMesesDialog",
+                    name: "br.com.gamma.zuiiscockpitassist.ext.fragment.VendasUltMesesDialog",
                     controller: this
                 }).then(function (oDialog) {
                     that._oVendasDialog = oDialog;
