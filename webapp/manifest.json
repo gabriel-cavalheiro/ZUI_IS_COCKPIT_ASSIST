@@ -34,6 +34,20 @@
           "odataVersion": "4.0"
         }
       }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "zui_is_cockpit_assist-manage": {
+          "semanticObject": "zui_is_cockpit_assist",
+          "action": "manage",
+          "title": "{{zui_is_cockpit_assist-manage.flpTitle}}",
+          "subTitle": "{{zui_is_cockpit_assist-manage.flpSubtitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
     }
   },
   "sap.ui": {
