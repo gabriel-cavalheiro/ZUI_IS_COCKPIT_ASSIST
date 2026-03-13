@@ -55,6 +55,11 @@ sap.ui.define([
             return true;
         },
 
+        _isDraftContext: function () {
+            var oCtx = this.base.getView().getBindingContext();
+            return !!oCtx && oCtx.getProperty("IsActiveEntity") === false;
+        },
+
         // ================================================================
         //  POPUP 1: ESTOQUE MATERIAL  (EF Seção 2.1.3)
         // ================================================================
@@ -76,6 +81,11 @@ sap.ui.define([
          * Custom Action: Abre o dialog de Estoque Material
          */
         onAbrirEstoqueMaterial: function () {
+            if (this._isDraftContext()) {
+                MessageToast.show("Acao indisponivel enquanto o atendimento estiver em rascunho.");
+                return;
+            }
+
             if (!this._captureClienteContext()) { return; }
 
             // Modelo local JSON para alimentar as tabelas do dialog
@@ -278,6 +288,11 @@ sap.ui.define([
          * Custom Action: Abre o dialog de Vendas
          */
         onAbrirVendasUltMeses: function () {
+            if (this._isDraftContext()) {
+                MessageToast.show("Acao indisponivel enquanto o atendimento estiver em rascunho.");
+                return;
+            }
+
             if (!this._captureClienteContext()) { return; }
 
             // Modelo local JSON

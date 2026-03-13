@@ -167,7 +167,7 @@
                     "EstoqueMaterials": {
                       "press": ".extension.br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirEstoqueMaterial",
                       "visible": true,
-                      "enabled": true,
+                      "enabled": "{= %{IsActiveEntity} === true }",
                       "text": "{i18n>btnEstoque}",
                       "position": {
                         "placement": "After",
@@ -177,7 +177,7 @@
                     "VendaUltMeses": {
                       "press": ".extension.br.com.gamma.zuiiscockpitassist.ext.controller.Cockpitpopup.onAbrirVendasUltMeses",
                       "visible": true,
-                      "enabled": true,
+                      "enabled": "{= %{IsActiveEntity} === true }",
                       "text": "{i18n>btnVendas}",
                       "position": {
                         "placement": "Before",
