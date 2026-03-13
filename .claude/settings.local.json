@@ -1,7 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(find /c/Users/Administrador/projects/zui_is_cockpit_assist -name *ItensPedido* -o -name *itensPedido*)"
-    ]
-  }
-}
