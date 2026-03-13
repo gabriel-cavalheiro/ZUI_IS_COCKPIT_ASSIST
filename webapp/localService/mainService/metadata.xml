@@ -70,6 +70,16 @@
                 <Property Name="TransactionCurrency" Type="Edm.String" Nullable="false" MaxLength="5"/>
                 <Property Name="QtdDocumentos" Type="Edm.Int32" Nullable="false"/>
             </EntityType>
+            <EntityType Name="ProdutosType">
+                <Key>
+                    <PropertyRef Name="Product"/>
+                    <PropertyRef Name="Language"/>
+                </Key>
+                <Property Name="Product" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="Language" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="ProductDescription" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="LanguageISOCode" Type="Edm.String" Nullable="false" MaxLength="2"/>
+            </EntityType>
             <EntityType Name="TitulosVencidosType">
                 <Key>
                     <PropertyRef Name="Customer"/>
@@ -121,6 +131,7 @@
                 <Property Name="TextoItem" Type="Edm.String" Nullable="false" MaxLength="40"/>
                 <Property Name="StatusEntrega" Type="Edm.String" Nullable="false" MaxLength="1"/>
                 <Property Name="StatusProcesso" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <NavigationProperty Name="_ProductDesc" Type="com.sap.gateway.srvd.zui_is_atend_cock.v0001.ProdutosType"/>
             </EntityType>
             <EntityType Name="I_DraftAdministrativeDataType">
                 <Key>
@@ -241,8 +252,11 @@
                     <NavigationPropertyBinding Path="_ItemsPO" Target="ItemsPO"/>
                 </EntitySet>
                 <EntitySet Name="EstoqueMaterial" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.EstoqueMaterialType"/>
-                <EntitySet Name="ItemsPO" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.ItemsPOType"/>
+                <EntitySet Name="ItemsPO" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.ItemsPOType">
+                    <NavigationPropertyBinding Path="_ProductDesc" Target="Produtos"/>
+                </EntitySet>
                 <EntitySet Name="I_DraftAdministrativeData" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.I_DraftAdministrativeDataType"/>
+                <EntitySet Name="Produtos" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.ProdutosType"/>
                 <EntitySet Name="TitulosVencidos" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.TitulosVencidosType"/>
                 <EntitySet Name="VendasUltimosMeses" EntityType="com.sap.gateway.srvd.zui_is_atend_cock.v0001.VendasUltimosMesesType"/>
             </EntityContainer>
@@ -394,6 +408,53 @@
                 </Annotation>
                 <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
                 <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProdutosType/Product">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Produto"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=PRODUCTNUMBER"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProdutosType/LanguageISOCode">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Idioma"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Código de idioma da SAP de 2 caracteres"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProdutosType">
+                <Annotation Term="SAP__common.Label" String="Descrições de produto"/>
+                <Annotation Term="SAP__common.SAPObjectNodeType">
+                    <Record>
+                        <PropertyValue Property="Name" String="ProductDescription"/>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/Produtos">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="true"/>
+                        <PropertyValue Property="UnsupportedExpressions" EnumMember="SAP__capabilities.SearchExpressions/AND SAP__capabilities.SearchExpressions/NOT SAP__capabilities.SearchExpressions/group "/>
+                        <PropertyValue Property="SearchSyntax" String="https://url.sap/odata-search"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
             </Annotations>
             <Annotations Target="SAP__self.TitulosVencidosType/Customer">
                 <Annotation Term="SAP__common.IsUpperCase"/>
@@ -698,6 +759,70 @@
                 <Annotation Term="SAP__common.QuickInfo" String="Status global de processamento (item)"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=GBSTA"/>
             </Annotations>
+            <Annotations Target="SAP__self.Container/ItemsPO">
+                <Annotation Term="SAP__capabilities.NavigationRestrictions">
+                    <Record>
+                        <PropertyValue Property="RestrictedProperties">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="NavigationProperty" NavigationPropertyPath="_ProductDesc"/>
+                                    <PropertyValue Property="InsertRestrictions">
+                                        <Record>
+                                            <PropertyValue Property="Insertable" Bool="false"/>
+                                        </Record>
+                                    </PropertyValue>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="NonUpdatableNavigationProperties">
+                            <Collection>
+                                <PropertyPath>_ProductDesc</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="Quantidade"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="ValorLiquido"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
             <Annotations Target="SAP__self.ItemsPOType">
                 <Annotation Term="SAP__common.Label" String="Basic - Itens do Pedido de Venda"/>
                 <Annotation Term="SAP__UI.LineItem">
@@ -743,49 +868,6 @@
                             <PropertyValue Property="Value" Path="StatusProcesso"/>
                         </Record>
                     </Collection>
-                </Annotation>
-            </Annotations>
-            <Annotations Target="SAP__self.Container/ItemsPO">
-                <Annotation Term="SAP__capabilities.SearchRestrictions">
-                    <Record>
-                        <PropertyValue Property="Searchable" Bool="false"/>
-                    </Record>
-                </Annotation>
-                <Annotation Term="SAP__capabilities.InsertRestrictions">
-                    <Record>
-                        <PropertyValue Property="Insertable" Bool="false"/>
-                    </Record>
-                </Annotation>
-                <Annotation Term="SAP__capabilities.DeleteRestrictions">
-                    <Record>
-                        <PropertyValue Property="Deletable" Bool="false"/>
-                    </Record>
-                </Annotation>
-                <Annotation Term="SAP__capabilities.UpdateRestrictions">
-                    <Record>
-                        <PropertyValue Property="Updatable" Bool="false"/>
-                        <PropertyValue Property="QueryOptions">
-                            <Record>
-                                <PropertyValue Property="SelectSupported" Bool="true"/>
-                            </Record>
-                        </PropertyValue>
-                    </Record>
-                </Annotation>
-                <Annotation Term="SAP__capabilities.FilterRestrictions">
-                    <Record>
-                        <PropertyValue Property="FilterExpressionRestrictions">
-                            <Collection>
-                                <Record>
-                                    <PropertyValue Property="Property" PropertyPath="Quantidade"/>
-                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
-                                </Record>
-                                <Record>
-                                    <PropertyValue Property="Property" PropertyPath="ValorLiquido"/>
-                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
-                                </Record>
-                            </Collection>
-                        </PropertyValue>
-                    </Record>
                 </Annotation>
             </Annotations>
             <Annotations Target="SAP__self.I_DraftAdministrativeDataType/DraftEntityType">
@@ -915,17 +997,44 @@
                     <Annotation Term="SAP__UI.TextArrangement" EnumMember="SAP__UI.TextArrangementType/TextOnly"/>
                 </Annotation>
             </Annotations>
+            <Annotations Target="SAP__self.CockpitType/DescrOperacao">
+                <Annotation Term="SAP__common.Label" String="Descrição da Operação"/>
+                <Annotation Term="SAP__common.QuickInfo" String="DescrOperação"/>
+            </Annotations>
+            <Annotations Target="SAP__self.CockpitType/TipoOcorrencia">
+                <Annotation Term="SAP__common.Label" String="Tipo Ocorrência"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Tp Ocorrência"/>
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zis_i_cfg_tpocor_vh/0001;ps='srvd-zui_is_atend_cock-0001';va='com.sap.gateway.srvd.zui_is_atend_cock.v0001.et-zc_is_atend_cock.tipoocorrencia'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.ValueListWithFixedValues"/>
+            </Annotations>
+            <Annotations Target="SAP__self.CockpitType/DescrOcorrencia">
+                <Annotation Term="SAP__common.Label" String="Descrição da Ocorrência"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Desc. Ocorrência"/>
+            </Annotations>
             <Annotations Target="SAP__self.CockpitType/Pedido">
+                <Annotation Term="SAP__common.Label" String="Pedido"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Pedido"/>
                 <Annotation Term="SAP__common.IsUpperCase"/>
-                <Annotation Term="SAP__common.Label" String="Documento SD"/>
                 <Annotation Term="SAP__common.Heading" String="Documento"/>
-                <Annotation Term="SAP__common.QuickInfo" String="Nº documento de vendas e distribuição"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=VBELN"/>
             </Annotations>
+            <Annotations Target="SAP__self.CockpitType/Nfe">
+                <Annotation Term="SAP__common.Label" String="NF-e"/>
+            </Annotations>
+            <Annotations Target="SAP__self.CockpitType/Observacao">
+                <Annotation Term="SAP__common.Label" String="Observação"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Obs"/>
+                <Annotation Term="SAP__UI.MultiLineText"/>
+            </Annotations>
             <Annotations Target="SAP__self.CockpitType/LocalCreatedBy">
+                <Annotation Term="SAP__common.Label" String="Criado por"/>
                 <Annotation Term="SAP__core.Computed"/>
                 <Annotation Term="SAP__common.IsUpperCase"/>
-                <Annotation Term="SAP__common.Label" String="Criado por"/>
+                <Annotation Term="SAP__common.Heading" String="Criado por"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Criado pelo usuário"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_CREATION_USER"/>
             </Annotations>
@@ -944,6 +1053,21 @@
                         <PropertyValue Property="Name" String="ZTBIS_ATEND_COCK"/>
                     </Record>
                 </Annotation>
+                <Annotation Term="SAP__common.SideEffects" Qualifier="SAP__Determine_Action_Prepare">
+                    <Record Type="SAP__common.SideEffectsType">
+                        <PropertyValue Property="TriggerAction" String="com.sap.gateway.srvd.zui_is_atend_cock.v0001.Prepare"/>
+                        <PropertyValue Property="SourceProperties">
+                            <Collection>
+                                <PropertyPath>Customer</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="TargetProperties">
+                            <Collection>
+                                <String>SAP__Messages</String>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
                 <Annotation Term="SAP__UI.DataPoint" Qualifier="DPNomeCliente">
                     <Record>
                         <PropertyValue Property="Value" Path="CustomerName"/>
@@ -957,6 +1081,18 @@
                         <PropertyValue Property="Criticality" Path="SituacaoCriticality"/>
                     </Record>
                 </Annotation>
+                <Annotation Term="SAP__UI.HeaderFacets">
+                    <Collection>
+                        <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="HeaderNomeCliente"/>
+                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.DataPoint#DPNomeCliente"/>
+                        </Record>
+                        <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="ID" String="HeaderSituacao"/>
+                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.DataPoint#DPSituacao"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
                 <Annotation Term="SAP__UI.Facets">
                     <Collection>
                         <Record Type="SAP__UI.ReferenceFacet">
@@ -965,7 +1101,12 @@
                             <PropertyValue Property="Target" AnnotationPath="@SAP__UI.Identification"/>
                         </Record>
                         <Record Type="SAP__UI.ReferenceFacet">
-                            <PropertyValue Property="Label" String="itens do Pedido"/>
+                            <PropertyValue Property="Label" String="Documentos"/>
+                            <PropertyValue Property="ID" String="Documentos"/>
+                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.FieldGroup#Documentos"/>
+                        </Record>
+                        <Record Type="SAP__UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="Itens do Pedido"/>
                             <PropertyValue Property="ID" String="itensPedido"/>
                             <PropertyValue Property="Target" AnnotationPath="_ItemsPO/@SAP__UI.LineItem"/>
                         </Record>
@@ -978,18 +1119,6 @@
                             <PropertyValue Property="Label" String="Dados Administrativos"/>
                             <PropertyValue Property="ID" String="AdminData"/>
                             <PropertyValue Property="Target" AnnotationPath="@SAP__UI.FieldGroup#Admin"/>
-                        </Record>
-                    </Collection>
-                </Annotation>
-                <Annotation Term="SAP__UI.HeaderFacets">
-                    <Collection>
-                        <Record Type="SAP__UI.ReferenceFacet">
-                            <PropertyValue Property="ID" String="HeaderNomeCliente"/>
-                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.DataPoint#DPNomeCliente"/>
-                        </Record>
-                        <Record Type="SAP__UI.ReferenceFacet">
-                            <PropertyValue Property="ID" String="HeaderSituacao"/>
-                            <PropertyValue Property="Target" AnnotationPath="@SAP__UI.DataPoint#DPSituacao"/>
                         </Record>
                     </Collection>
                 </Annotation>
@@ -1028,10 +1157,6 @@
                                 <Record Type="SAP__UI.DataField">
                                     <PropertyValue Property="Label" String="NF-e"/>
                                     <PropertyValue Property="Value" Path="Nfe"/>
-                                </Record>
-                                <Record Type="SAP__UI.DataField">
-                                    <PropertyValue Property="Label" String="Observação"/>
-                                    <PropertyValue Property="Value" Path="Observacao"/>
                                 </Record>
                             </Collection>
                         </PropertyValue>
@@ -1103,6 +1228,10 @@
                             <PropertyValue Property="Label" String="Desc. Operação"/>
                             <PropertyValue Property="Value" Path="DescrOperacao"/>
                         </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Observação"/>
+                            <PropertyValue Property="Value" Path="Observacao"/>
+                        </Record>
                     </Collection>
                 </Annotation>
                 <Annotation Term="SAP__UI.LineItem">
@@ -1150,6 +1279,14 @@
                             <PropertyValue Property="Value" Path="Operacao"/>
                             <Annotation Term="SAP__UI.Importance" EnumMember="SAP__UI.ImportanceType/Medium"/>
                         </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Tipo Ocorrência"/>
+                            <PropertyValue Property="Value" Path="TipoOcorrencia"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Desc. Operação"/>
+                            <PropertyValue Property="Value" Path="DescrOperacao"/>
+                        </Record>
                         <Record Type="SAP__UI.DataFieldForAction">
                             <PropertyValue Property="Label" String="Finalizar"/>
                             <PropertyValue Property="Action" String="com.sap.gateway.srvd.zui_is_atend_cock.v0001.finalizar(com.sap.gateway.srvd.zui_is_atend_cock.v0001.CockpitType)"/>
@@ -1165,6 +1302,34 @@
                             <PropertyValue Property="Action" String="com.sap.gateway.srvd.zui_is_atend_cock.v0001.reabrir(com.sap.gateway.srvd.zui_is_atend_cock.v0001.CockpitType)"/>
                             <PropertyValue Property="InvocationGrouping" EnumMember="SAP__UI.OperationGroupingType/Isolated"/>
                         </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Pedido"/>
+                            <PropertyValue Property="Value" Path="Pedido"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Desc. Ocorrência"/>
+                            <PropertyValue Property="Value" Path="DescrOcorrencia"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="NF-e"/>
+                            <PropertyValue Property="Value" Path="Nfe"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Criado por"/>
+                            <PropertyValue Property="Value" Path="LocalCreatedBy"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Criado em"/>
+                            <PropertyValue Property="Value" Path="LocalCreatedAt"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Alterado por"/>
+                            <PropertyValue Property="Value" Path="LocalLastChangedBy"/>
+                        </Record>
+                        <Record Type="SAP__UI.DataField">
+                            <PropertyValue Property="Label" String="Alterado em"/>
+                            <PropertyValue Property="Value" Path="LocalLastChangedAt"/>
+                        </Record>
                     </Collection>
                 </Annotation>
                 <Annotation Term="SAP__UI.SelectionFields">
@@ -1179,22 +1344,23 @@
                 <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
             </Annotations>
             <Annotations Target="SAP__self.CockpitType/LocalCreatedAt">
-                <Annotation Term="SAP__core.Computed"/>
                 <Annotation Term="SAP__common.Label" String="Criado em"/>
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__common.Heading" String="Criado em"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Data/hora de criação"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_CREATION_TSTMPL"/>
             </Annotations>
             <Annotations Target="SAP__self.CockpitType/LocalLastChangedBy">
+                <Annotation Term="SAP__common.Label" String="Alterado por"/>
                 <Annotation Term="SAP__core.Computed"/>
                 <Annotation Term="SAP__common.IsUpperCase"/>
-                <Annotation Term="SAP__common.Label" String="Modificado por"/>
                 <Annotation Term="SAP__common.Heading" String="Modif.por"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Última modificação da instância local pelo usuário"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_LOCINST_LASTCHANGE_USER"/>
             </Annotations>
             <Annotations Target="SAP__self.CockpitType/LocalLastChangedAt">
+                <Annotation Term="SAP__common.Label" String="Alterado em"/>
                 <Annotation Term="SAP__core.Computed"/>
-                <Annotation Term="SAP__common.Label" String="Modificado em"/>
                 <Annotation Term="SAP__common.Heading" String="Modif.em"/>
                 <Annotation Term="SAP__common.QuickInfo" String="Data e hora da última modificação da instância local"/>
                 <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=ABP_LOCINST_LASTCHANGE_TSTMPL"/>
@@ -1411,6 +1577,14 @@
                     </Record>
                 </Annotation>
             </Annotations>
+            <Annotations Target="SAP__self.CockpitType/Operacao">
+                <Annotation Term="SAP__common.ValueListReferences">
+                    <Collection>
+                        <String>../../../../srvd_f4/sap/zis_i_cfg_oper_vh/0001;ps='srvd-zui_is_atend_cock-0001';va='com.sap.gateway.srvd.zui_is_atend_cock.v0001.et-zc_is_atend_cock.operacao'/$metadata</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__common.ValueListWithFixedValues"/>
+            </Annotations>
             <Annotations Target="SAP__self.I_DraftAdministrativeDataType/DraftUUID">
                 <Annotation Term="SAP__UI.Hidden"/>
                 <Annotation Term="SAP__common.Label" String="Rascunho (ID técn.)"/>
@@ -1458,6 +1632,15 @@
             </Annotations>
             <Annotations Target="SAP__self.CockpitType/SituacaoCriticality">
                 <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProdutosType/Language">
+                <Annotation Term="SAP__common.Label" String="Código de idioma"/>
+                <Annotation Term="SAP__common.Heading" String="Idioma"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=SPRAS"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProdutosType/ProductDescription">
+                <Annotation Term="SAP__common.Label" String="Descrição do produto"/>
+                <Annotation Term="SAP__common.DocumentationRef" String="urn:sap-com:documentation:key?=type=DE&amp;id=PRODUCTDESCRIPTION"/>
             </Annotations>
             <Annotations Target="SAP__self.TitulosVencidosType/PrazoPagamento">
                 <Annotation Term="SAP__common.Label" String="Data vencimento líq."/>

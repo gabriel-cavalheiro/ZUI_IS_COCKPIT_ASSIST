@@ -60,6 +60,24 @@ sap.ui.define([
             return !!oCtx && oCtx.getProperty("IsActiveEntity") === false;
         },
 
+        _getMaterialValueHelpFilters: function (sValue) {
+            var aFilters = [
+                new Filter("Language", FilterOperator.EQ, "P")
+            ];
+
+            if (sValue) {
+                aFilters.push(new Filter({
+                    filters: [
+                        new Filter("Product", FilterOperator.Contains, sValue),
+                        new Filter("ProductDescription", FilterOperator.Contains, sValue)
+                    ],
+                    and: false
+                }));
+            }
+
+            return aFilters;
+        },
+
         // ================================================================
         //  POPUP 1: ESTOQUE MATERIAL  (EF Seção 2.1.3)
         // ================================================================
@@ -215,6 +233,7 @@ sap.ui.define([
         onMaterialValueHelpDialog: function (oEvent) {
             var oSource = oEvent.getSource();
             var oView = this.base.getView();
+            var that = this;
 
             if (!this._oMatVHDialog) {
                 this._oMatVHDialog = new sap.m.SelectDialog({
@@ -223,10 +242,8 @@ sap.ui.define([
                     growing: true,
                     growingThreshold: 50,
                     items: {
-                        path: "/ProductDescription",
-                        filters: [
-                            new Filter("Language", FilterOperator.EQ, "P")
-                        ],
+                        path: "/Produtos",
+                        filters: this._getMaterialValueHelpFilters(),
                         sorter: new sap.ui.model.Sorter("Product"),
                         template: new sap.m.StandardListItem({
                             title: "{Product}",
@@ -240,17 +257,17 @@ sap.ui.define([
                             oSource.setValue(oItem.getTitle());
                         }
                     },
+                    search: function (oEvt) {
+                        var sValue = oEvt.getParameter("value");
+                        oEvt.getSource().getBinding("items").filter(
+                            that._getMaterialValueHelpFilters(sValue)
+                        );
+                    },
                     liveChange: function (oEvt) {
                         var sValue = oEvt.getParameter("value");
-                        oEvt.getSource().getBinding("items").filter([
-                            new Filter({
-                                filters: [
-                                    new Filter("Product", FilterOperator.Contains, sValue),
-                                    new Filter("ProductDescription", FilterOperator.Contains, sValue)
-                                ],
-                                and: false
-                            })
-                        ]);
+                        oEvt.getSource().getBinding("items").filter(
+                            that._getMaterialValueHelpFilters(sValue)
+                        );
                     }
                 });
                 oView.addDependent(this._oMatVHDialog);
