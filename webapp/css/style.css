@@ -1,0 +1,16 @@
+.cockpitEstoqueTabs .sapMITBFilter {
+    width: 12rem;
+}
+
+.cockpitEstoqueTabs .sapMITBTab {
+    height: auto;
+    min-height: 5.5rem;
+}
+
+.cockpitEstoqueTabs .sapMITBText {
+    max-width: 100%;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    line-height: 1.2;
+}

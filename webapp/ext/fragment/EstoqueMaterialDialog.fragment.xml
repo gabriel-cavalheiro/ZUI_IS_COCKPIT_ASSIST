@@ -41,7 +41,10 @@
     </customHeader>
  
     <content>
-      <IconTabBar id="itbEstoque" select=".onEstoqueTabSelect">
+      <IconTabBar
+        id="itbEstoque"
+        select=".onEstoqueTabSelect"
+        class="cockpitEstoqueTabs">
  
         <!-- Tab: Material Consultado -->
         <items>
